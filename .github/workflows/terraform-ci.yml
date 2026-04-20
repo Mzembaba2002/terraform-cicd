@@ -1,9 +1,6 @@
-name: Terraform CI
+name: Terraform PR Checks
 
 on:
-  push:
-    branches:
-      - principal
   pull_request:
     branches:
       - principal
@@ -28,3 +25,14 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: terraform
+          quiet: true
+          soft_fail: false
+
+      - name: Terraform Plan
+        run: terraform plan -no-color
